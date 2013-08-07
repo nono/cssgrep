@@ -14,6 +14,7 @@ if ARGV.empty?
 end
 
 selector = ARGV.shift
+ARGV.push '-' if ARGV.empty?
 ARGV.each do |file|
   content = file == '-' ? $stdin.read : File.read(file)
   doc = Nokogiri::HTML.parse content
