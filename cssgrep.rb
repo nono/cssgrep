@@ -9,14 +9,15 @@ rescue LoadError
 end
 
 if ARGV.empty?
-  puts "usage: cssgrep.rb <selector> [FILE...]"
+  puts "usage: #{$0} <selector> [FILE...]"
   exit
 end
 
+type = File.basename($0).start_with?("xpath") ? :xpath : :css
 selector = ARGV.shift
 ARGV.push '-' if ARGV.empty?
 ARGV.each do |file|
   content = file == '-' ? $stdin.read : File.read(file)
   doc = Nokogiri::HTML.parse content
-  puts doc.css(selector).map(&:to_s)
+  puts doc.send(type, selector).map(&:to_s)
 end
